@@ -21,13 +21,40 @@ long_df["date"] = pd.to_datetime(dict(year=long_df["year"], month=long_df["month
 # Sort by actual date
 long_df = long_df.sort_values("date")
 
-# Plot the line graph
-plt.figure(figsize=(10, 6))
-plt.plot(long_df["date"], long_df["total_distance"], marker="o", linestyle="-")
+latest_year = long_df["year"].max()
+forecast_year = latest_year + 1
 
-plt.title("Total Distance Driven Per Month")
+monthly_avg = (
+    long_df[long_df["year"] >= latest_year - 2]
+    .groupby("month")["total_distance"]
+    .mean()
+    .round()
+    .astype(int)
+)
+
+# Build forecast DataFrame
+forecast_df = pd.DataFrame({
+    "year": forecast_year,
+    "month": monthly_avg.index,
+    "total_distance": monthly_avg.values,
+})
+forecast_df["day"] = 1
+forecast_df["date"] = pd.to_datetime(dict(year=forecast_df["year"], month=forecast_df["month"], day=forecast_df["day"]))
+forecast_df["type"] = "Forecast"
+long_df["type"] = "Actual"
+
+# Combine data
+full_df = pd.concat([long_df, forecast_df], ignore_index=True)
+
+# --- Plotting ---
+plt.figure(figsize=(12, 6))
+for label, group in full_df.groupby("type"):
+    plt.plot(group["date"], group["total_distance"], label=label, marker='o', linestyle='--' if label == "Forecast" else '-')
+
+plt.title("Total Distance Driven Per Month with Forecast")
 plt.xlabel("Date")
 plt.ylabel("Distance Driven")
 plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
 plt.tight_layout()
 plt.show()
