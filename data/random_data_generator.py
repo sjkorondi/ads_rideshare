@@ -37,7 +37,7 @@ def generateDate(num_gen: int):
     return formatted_date
 
 def createRandomData():
-    with open(r"C:\Users\simon\OneDrive\Desktop\dss_project\random_ride_data.csv", 'w', newline='') as csvfile: # writes randomly generated data to a .csv file (already made, not needed)
+    with open(r"data\random_ride_data.csv", 'w', newline='') as csvfile: # writes randomly generated data to a .csv file (already made, not needed)
         fieldnames = ['vehicle', 'date', 'distance']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -51,7 +51,7 @@ def createRandomData():
 
 if __name__ == "__main__":
     createRandomData()
-    df = pd.read_csv(r"C:\Users\simon\OneDrive\Desktop\dss_project\random_ride_data.csv")
+    df = pd.read_csv(r"data\random_ride_data.csv")
 
     print(df.head())
 
@@ -61,4 +61,4 @@ if __name__ == "__main__":
 
     df = df.sort_values('date').reset_index(drop=True) # sorting data by the date
 
-    df.to_csv(r"C:\Users\simon\OneDrive\Desktop\dss_project\cleaned_sorted_ride_data.csv", index=False) # save cleaned and sorted data
+    df.to_csv(r"data\cleaned_sorted_ride_data.csv", index=False) # save cleaned and sorted data
