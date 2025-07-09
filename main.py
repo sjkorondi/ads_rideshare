@@ -33,7 +33,7 @@ if __name__ == "__main__":
     PlotData.plot(full_df) # plot data
 
     def extractCarID ():
-    return [
+        return [
         {"id": 1},
         {"id": 2},
         {"id": 3},
