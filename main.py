@@ -6,10 +6,9 @@ MAINTENANCE_MILES = 3000
 
 rdg.run() # generate data for past trips
 
-df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # loads past trips
+df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # load past trips
 
-df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce') # cleans data for graphing
-df['distance'] = df['distance'] // 1
+df["date"] = pd.to_datetime(df["date"], format="mixed", errors="coerce") # clean data for graphing
 df["month"] = df["date"].dt.month
 df["year"] = df["date"].dt.year
 
