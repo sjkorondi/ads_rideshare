@@ -49,11 +49,9 @@ def createRandomData():
                 'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
             })
 
-if __name__ == "__main__":
+def run():
     createRandomData()
     df = pd.read_csv(r"data\random_ride_data.csv")
-
-    print(df.head())
 
     df['vehicle'] = df['vehicle'].astype(int) # cleaning data
     df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce')

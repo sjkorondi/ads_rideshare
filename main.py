@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from data import random_data_generator as rdg
+
+rdg.run()
+
 df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv")
 
 df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce')
