@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from data import random_data_generator as rdg
 
-rdg.run() # generates data for past trips
+rdg.run() # generate data for past trips
 
 df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # loads past trips
 
@@ -14,16 +14,18 @@ df["year"] = df["date"].dt.year
 pivot = df.pivot_table(values="distance",index="year",columns="month", aggfunc="sum") # creates pivot table for the graph, displays sum
 long_df = pivot.reset_index().melt(id_vars="year", var_name="month", value_name="total_distance")
 
-# Create a datetime column for plotting
-long_df["day"] = 1  # Set dummy day
+# create datetime column for plotting
+long_df["day"] = 1  # dummy day
 long_df["date"] = pd.to_datetime(dict(year=long_df["year"], month=long_df["month"], day=long_df["day"]))
 
-# Sort by actual date
+# sort by actual date
 long_df = long_df.sort_values("date")
 
+# get year for forecasting
 latest_year = long_df["year"].max()
 forecast_year = latest_year + 1
 
+# calculate average distance driven per month for past three years
 monthly_avg = (
     long_df[long_df["year"] >= latest_year - 2]
     .groupby("month")["total_distance"]
@@ -32,7 +34,7 @@ monthly_avg = (
     .astype(int)
 )
 
-# Build forecast DataFrame
+# build forecast dataframe
 forecast_df = pd.DataFrame({
     "year": forecast_year,
     "month": monthly_avg.index,
@@ -43,10 +45,10 @@ forecast_df["date"] = pd.to_datetime(dict(year=forecast_df["year"], month=foreca
 forecast_df["type"] = "Forecast"
 long_df["type"] = "Actual"
 
-# Combine data
+# combine data
 full_df = pd.concat([long_df, forecast_df], ignore_index=True)
 
-# --- Plotting ---
+# plot data
 plt.figure(figsize=(12, 6))
 for label, group in full_df.groupby("type"):
     plt.plot(group["date"], group["total_distance"], label=label, marker='o', linestyle='--' if label == "Forecast" else '-')
