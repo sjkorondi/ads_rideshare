@@ -12,15 +12,12 @@ def runPastTrips(df):
     long_df["day"] = 1  # dummy day
     long_df["date"] = pd.to_datetime(dict(year=long_df["year"], month=long_df["month"], day=long_df["day"]))
 
-    # sort by actual date
-    long_df = long_df.sort_values("date")
+    long_df = long_df.sort_values("date") # sort by actual date
 
-    # get year for forecasting
-    latest_year = long_df["year"].max()
+    latest_year = long_df["year"].max() # get year for forecasting
     forecast_year = latest_year + 1
 
-    # calculate average distance driven per month for past three years
-    monthly_avg = (
+    monthly_avg = ( # calculate average distance driven per month for past three years
         long_df[long_df["year"] >= latest_year - 2]
         .groupby("month")["total_distance"]
         .mean()
@@ -28,8 +25,7 @@ def runPastTrips(df):
         .astype(int)
     )
 
-    # build forecast dataframe
-    forecast_df = pd.DataFrame({
+    forecast_df = pd.DataFrame({ # build forecast dataframe
         "year": forecast_year,
         "month": monthly_avg.index,
         "total_distance": monthly_avg.values,
@@ -39,7 +35,6 @@ def runPastTrips(df):
     forecast_df["type"] = "Forecast"
     long_df["type"] = "Actual"
 
-    # combine data
-    full_df = pd.concat([long_df, forecast_df], ignore_index=True)
+    full_df = pd.concat([long_df, forecast_df], ignore_index=True) # combine data
 
     return full_df
