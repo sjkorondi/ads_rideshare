@@ -2,7 +2,7 @@ import csv
 import random
 import pandas as pd
 
-NUM_DATES = 200
+NUM_DATES = 200 # change this number to generate more rides
 MONTHS = list(range(1,13))
 MONTH_WEIGHTS = [ # bias weights, simulating more business during summer months
     1,2,2,3,
