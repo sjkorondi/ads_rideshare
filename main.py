@@ -1,18 +1,19 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-
 from data import random_data_generator as rdg
 
-rdg.run()
+rdg.run() # generates data for past trips
 
-df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv")
+df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # loads past trips
 
-df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce')
+df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce') # cleans data for graphing
 df['distance'] = df['distance'] // 1
 df["month"] = df["date"].dt.month
 df["year"] = df["date"].dt.year
 
-pivot = df.pivot_table(values="distance",index="year",columns="month")
+pivot = df.pivot_table(values="distance",index="year",columns="month", aggfunc="sum") # creates pivot table for the graph
+
+print(pivot)
 
 last_date = df['date'].max()
 

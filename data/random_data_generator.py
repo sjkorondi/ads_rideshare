@@ -2,7 +2,7 @@ import csv
 import random
 import pandas as pd
 
-NUM_DATES = 200 # change this number to generate more rides
+NUM_DATES = 600 # change this number to generate more rides
 MONTHS = list(range(1,13))
 MONTH_WEIGHTS = [ # bias weights, simulating more business during summer months
     1,2,2,3,
@@ -22,7 +22,9 @@ def pickBiasedMonth():
     return random.choices(MONTHS, weights=MONTH_WEIGHTS, k=1)[0]
 
 def pickYear(num_gen: int):
-    if num_gen < NUM_DATES / 2:
+    if num_gen <= 200:
+        return 2022
+    elif num_gen <= 400:
         return 2023
     else:
         return 2024
