@@ -51,7 +51,7 @@ def createRandomData():
                 'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
             })
 
-def run():
+def generate():
     createRandomData()
     df = pd.read_csv(r"data\random_ride_data.csv")
 

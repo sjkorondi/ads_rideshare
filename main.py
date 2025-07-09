@@ -1,62 +1,38 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from data import random_data_generator as rdg
 
-rdg.run() # generate data for past trips
+from data import RandomDataGenerator as rdg
+import PlotData
+import PastTrips
+import Car
 
-df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # loads past trips
+PETROL_PRICE = 1.67 # average petrol price (euros/litre) in Germany as of 07/07/2025
+petrol_spending = 0
+distance_driven = 0
 
-df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce') # cleans data for graphing
-df['distance'] = df['distance'] // 1
-df["month"] = df["date"].dt.month
-df["year"] = df["date"].dt.year
+if __name__ == "__main__":
+    car_list = [] # initialize a list of cars
+    for i in range(10):
+        car_list.append(Car.Car(True if i <= 6 else False)) # first seven are light, last three are heavy
 
-pivot = df.pivot_table(values="distance",index="year",columns="month", aggfunc="sum") # creates pivot table for the graph, displays sum
-long_df = pivot.reset_index().melt(id_vars="year", var_name="month", value_name="total_distance")
+    rdg.generate() # generate data for past trips
 
-# create datetime column for plotting
-long_df["day"] = 1  # dummy day
-long_df["date"] = pd.to_datetime(dict(year=long_df["year"], month=long_df["month"], day=long_df["day"]))
+    df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # load past trips
+    full_df = PastTrips.runPastTrips(df) # get forecasted data from past trips
 
-# sort by actual date
-long_df = long_df.sort_values("date")
+    for row in df.itertuples(index=False): # assign each car the distance it drove in the past
+        car_list[row.vehicle - 1].updateDriven(row.distance)
 
-# get year for forecasting
-latest_year = long_df["year"].max()
-forecast_year = latest_year + 1
+    for car in car_list:
+        petrol_spending += round(car.getLitres() * PETROL_PRICE, 2)
+        distance_driven += car.getDriven()
 
-# calculate average distance driven per month for past three years
-monthly_avg = (
-    long_df[long_df["year"] >= latest_year - 2]
-    .groupby("month")["total_distance"]
-    .mean()
-    .round()
-    .astype(int)
-)
+    print("Total euros spent on petrol: " + str(round(petrol_spending, 2))) # rounding here because floating point issues
+    print("Total kilometers driven: " + str(distance_driven))
 
-# build forecast dataframe
-forecast_df = pd.DataFrame({
-    "year": forecast_year,
-    "month": monthly_avg.index,
-    "total_distance": monthly_avg.values,
-})
-forecast_df["day"] = 1
-forecast_df["date"] = pd.to_datetime(dict(year=forecast_df["year"], month=forecast_df["month"], day=forecast_df["day"]))
-forecast_df["type"] = "Forecast"
-long_df["type"] = "Actual"
+    PlotData.plot(full_df) # plot data
 
-# combine data
-full_df = pd.concat([long_df, forecast_df], ignore_index=True)
-
-# plot data
-plt.figure(figsize=(12, 6))
-for label, group in full_df.groupby("type"):
-    plt.plot(group["date"], group["total_distance"], label=label, marker='o', linestyle='--' if label == "Forecast" else '-')
-
-
-
-
-def extractCarID ():
+    def extractCarID ():
     return [
         {"id": 1},
         {"id": 2},
@@ -98,12 +74,3 @@ def pick_car (passenger_count, vehicles):
             return "heavy"
     else: 
         return "light"
-    
-
-plt.title("Total Distance Driven Per Month with Forecast")
-plt.xlabel("Date")
-plt.ylabel("Distance Driven")
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.legend()
-plt.tight_layout()
-plt.show()

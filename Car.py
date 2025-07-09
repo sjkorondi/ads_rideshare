@@ -1,0 +1,26 @@
+class Car():
+    def __init__(self, type: bool): # true for light, false for heavy
+        self.type = type
+        self.kilos_driven = 0
+        self.litres_burnt = 0
+        self.maintenance_kilos = 3000 if type else 2000 # light vehicles require less maintenance
+        self.kilos_per_litre = 18 if type else 14 # light vehicles get better fuel economy
+
+    def getType(self):
+        return self.type
+
+    def getDriven(self):
+        return self.kilos_driven
+    
+    def updateDriven(self, kilos: int):
+        self.kilos_driven += kilos
+        self.litres_burnt += (kilos / self.kilos_per_litre)
+
+    def getLitres(self):
+        return self.litres_burnt
+
+    def getMaintenanceKilos(self):
+        return self.maintenance_kilos
+
+    def checkMaintenance(self): # if the car has driven enough, it requires maintenance
+        return self.kilos_driven >= self.maintenance_kilos
