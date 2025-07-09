@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from data import random_data_generator as rdg
 
+MAINTENANCE_MILES = 3000
+
 rdg.run() # generate data for past trips
 
 df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # loads past trips
