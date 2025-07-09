@@ -15,7 +15,7 @@ if __name__ == "__main__":
     for i in range(10):
         car_list.append(Car.Car(True if i <= 6 else False)) # first seven are light, last three are heavy
 
-    rdg.run() # generate data for past trips
+    rdg.generate() # generate data for past trips
 
     df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # load past trips
     full_df = PastTrips.runPastTrips(df) # get forecasted data from past trips
