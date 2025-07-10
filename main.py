@@ -20,6 +20,13 @@ if __name__ == "__main__":
 
     df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # load past trips
     full_df = PastTrips.runPastTrips(df) # get forecasted data from past trips
+    forecasted_distance = 0
+
+    for row in full_df.itertuples():
+        forecasted_distance += row.total_distance if row.type == "Forecast" else 0
+    
+    print(str(forecasted_distance))
+
 
     for row in df.itertuples(index=False): # assign each car the distance it drove in the past
         car_list[row.vehicle - 1].updateDriven(row.distance)
@@ -29,7 +36,7 @@ if __name__ == "__main__":
     forecast_plot = PlotData.makeForecastPlot(full_df)
     car_plot = PlotData.makeCarPlot(car_list)
 
-    gui = GUI.GUI(root, car_list, forecast_plot, car_plot)
+    gui = GUI.GUI(root, forecasted_distance, car_list, forecast_plot, car_plot)
 
     root.mainloop()
 
