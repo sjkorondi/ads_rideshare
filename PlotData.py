@@ -1,8 +1,8 @@
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
-def plot(full_df): # plot the provided dataframe (assumes dataframe given from PastTrips module)
-    plt.figure(figsize=(12, 6))
-    ax = plt.gca()
+def makeForecastPlot(full_df): # plot the provided dataframe (assumes dataframe given from PastTrips module)
+    fig = Figure(figsize=(12,6), dpi=100)
+    ax = fig.add_subplot(111)
 
     for label, group in full_df.groupby("type"):
         ax.plot(group["date"], group["total_distance"], label=label, marker='o', linestyle='--' if label == "Forecast" else '-')
@@ -14,10 +14,29 @@ def plot(full_df): # plot the provided dataframe (assumes dataframe given from P
                 ha='center',
                 va='bottom')
 
-    plt.title("Total Distance Driven Per Month with Forecast")
-    plt.xlabel("Date")
-    plt.ylabel("Distance Driven")
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
+    ax.set_title("Total Distance Driven Per Month With Forecast")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Distance Driven")
+    ax.grid(True, linestyle='--', alpha=0.6)
+    ax.legend()
+
+    return fig
+
+def makeCarPlot(cars):
+    fig = Figure(figsize=(12,6), dpi=100)
+    ax = fig.add_subplot(111)
+
+    for car in cars:
+        ax.bar(car.getId(), car.getDriven()) # , tick_label=car.getId()
+        ax.text(car.getId(), car.getDriven() + 10,
+                str(car.getDriven()),
+                fontsize=8,
+                ha='center',
+                va='bottom')
+
+    ax.set_title("Total Distance Driven By Car")
+    ax.set_xlabel("Vehicle ID")
+    ax.set_ylabel("Distance Driven")
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    return fig

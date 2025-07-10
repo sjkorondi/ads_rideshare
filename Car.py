@@ -1,10 +1,14 @@
 class Car():
-    def __init__(self, type: bool): # true for light, false for heavy
+    def __init__(self, id: int, type: bool): # true for light, false for heavy
+        self.id = id
         self.type = type
         self.kilos_driven = 0
         self.litres_burnt = 0
-        self.maintenance_kilos = 3000 if type else 2000 # light vehicles require less maintenance
+        self.maintenance_kilos = 2200 if type else 1800 # light vehicles require less maintenance
         self.kilos_per_litre = 18 if type else 14 # light vehicles get better fuel economy
+
+    def getId(self):
+        return self.id
 
     def getType(self):
         return self.type
