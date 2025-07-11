@@ -29,8 +29,8 @@ def pickYear(num_gen: int):
     else:
         return 2024
     
-def generateDate(num_gen: int):
-    year = pickYear(num_gen=num_gen)
+def generateDate(num_gen: int, is_2025: bool):
+    year = 2025 if is_2025 else pickYear(num_gen=num_gen)
     month = pickBiasedMonth()
     day = pickRandomDay(month=month)
 
@@ -38,21 +38,21 @@ def generateDate(num_gen: int):
 
     return formatted_date
 
-def createRandomData():
+def createRandomDataPast():
     with open(r"data\random_ride_data.csv", 'w', newline='') as csvfile: # writes randomly generated data to a .csv file (already made, not needed)
         fieldnames = ['vehicle', 'date', 'distance']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
-        for x in range(NUM_DATES):
+        for x in range(600):
             writer.writerow({
                 'vehicle': random.randint(1,10), # business owns 10 vehicles
-                'date': generateDate(x),
+                'date': generateDate(x, False),
                 'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 70 kilometers in one trip
             })
 
-def generate():
-    createRandomData()
+def generatePast():
+    createRandomDataPast()
     df = pd.read_csv(r"data\random_ride_data.csv")
 
     df['vehicle'] = df['vehicle'].astype(int) # cleaning data
@@ -62,3 +62,28 @@ def generate():
     df = df.sort_values('date').reset_index(drop=True) # sorting data by the date
 
     df.to_csv(r"data\cleaned_sorted_ride_data.csv", index=False) # save cleaned and sorted data
+
+def createRandomDataCurrent():
+    with open(r"data\future_ride_data.csv", 'w', newline='') as csvfile: # writes randomly generated data to a .csv file (already made, not needed)
+        fieldnames = ['vehicle', 'date', 'distance']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for x in range(200):
+            writer.writerow({
+                'vehicle': random.randint(1,10), # business owns 10 vehicles
+                'date': generateDate(x, True),
+                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 70 kilometers in one trip
+            })
+
+def generateCurrent():
+    createRandomDataCurrent()
+    df = pd.read_csv(r"data\future_ride_data.csv")
+
+    df['vehicle'] = df['vehicle'].astype(int) # cleaning data
+    df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce')
+    df['distance'] = df['distance'].astype(int)
+
+    df = df.sort_values('date').reset_index(drop=True) # sorting data by the date
+
+    df.to_csv(r"data\cleaned_sorted_future_data.csv", index=False) # save cleaned and sorted data

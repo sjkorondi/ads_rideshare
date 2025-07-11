@@ -174,6 +174,10 @@ class GUI():
 
     def transitionScreen(self):
             self.clear()
+
+            for car in self.cars:
+                 car.resetMaintenance()
+
             tk.Label(self.root,
                     bg="white", 
                     font=("Arial", 16, "bold"),
