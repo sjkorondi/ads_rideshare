@@ -4,8 +4,9 @@ class Car():
         self.type = type
         self.kilos_driven = 0
         self.litres_burnt = 0
-        self.maintenance_kilos = 2200 if type else 1800 # light vehicles require less maintenance
+        self.maintenance_kilos = 2600 if type else 2000 # light vehicles require less maintenance
         self.kilos_per_litre = 18 if type else 14 # light vehicles get better fuel economy
+        self.maintenance_needed = False
 
     def getId(self):
         return self.id
@@ -27,4 +28,8 @@ class Car():
         return self.maintenance_kilos
 
     def checkMaintenance(self): # if the car has driven enough, it requires maintenance
-        return self.kilos_driven >= self.maintenance_kilos
+        self.maintenance_needed = self.kilos_driven >= self.maintenance_kilos
+        return self.maintenance_needed
+    
+    def hypoMaintenance(self, extra: int):
+        return ((self.kilos_driven + extra) >= self.maintenance_kilos) and (not self.maintenance_needed)

@@ -15,8 +15,8 @@ def makeForecastPlot(full_df): # plot the provided dataframe (assumes dataframe 
                 va='bottom')
 
     ax.set_title("Total Distance Driven Per Month With Forecast")
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Distance Driven")
+    ax.set_xlabel("Date, YYYY-MM")
+    ax.set_ylabel("Distance Driven, km")
     ax.grid(True, linestyle='--', alpha=0.6)
     ax.legend()
 
@@ -36,7 +36,7 @@ def makeCarPlot(cars):
 
     ax.set_title("Total Distance Driven By Car")
     ax.set_xlabel("Vehicle ID")
-    ax.set_ylabel("Distance Driven")
+    ax.set_ylabel("Distance Driven, km")
     ax.grid(True, linestyle='--', alpha=0.6)
 
     return fig

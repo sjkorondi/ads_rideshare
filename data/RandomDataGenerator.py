@@ -48,7 +48,7 @@ def createRandomData():
             writer.writerow({
                 'vehicle': random.randint(1,10), # business owns 10 vehicles
                 'date': generateDate(x),
-                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
+                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 70 kilometers in one trip
             })
 
 def generate():

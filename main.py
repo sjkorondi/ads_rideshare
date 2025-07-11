@@ -22,11 +22,8 @@ if __name__ == "__main__":
     full_df = PastTrips.runPastTrips(df) # get forecasted data from past trips
     forecasted_distance = 0
 
-    for row in full_df.itertuples():
+    for row in full_df.itertuples(): # calculate the total forecasted distance
         forecasted_distance += row.total_distance if row.type == "Forecast" else 0
-    
-    print(str(forecasted_distance))
-
 
     for row in df.itertuples(index=False): # assign each car the distance it drove in the past
         car_list[row.vehicle - 1].updateDriven(row.distance)
