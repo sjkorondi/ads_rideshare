@@ -145,7 +145,7 @@ class GUI():
                     font=("Arial", 16, "bold"),
                     padx=10, pady=10,
                     text="The forecasted petrol costs of €{} plus the forecasted maintenance costs of €{}\n" \
-                            "leads us to estimate operational costs of 2025 at €{}.".format(
+                            "leads us to estimate the operational costs of 2025 at €{}.".format(
                                 self.forecasted_petrol, 
                                 self.forecasted_maintenance, 
                                 self.forecasted_maintenance + self.forecasted_petrol)

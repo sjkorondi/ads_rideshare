@@ -18,7 +18,7 @@ def pickRandomDay(month: int): # generate a random day of the month
     else: # otherwise it has 30 days
         return random.randint(1,30)
 
-def pickBiasedMonth():
+def pickBiasedMonth(): # more likely to pick summer months (shows a bias towards their service being used in the summer)
     return random.choices(MONTHS, weights=MONTH_WEIGHTS, k=1)[0]
 
 def pickYear(num_gen: int):
@@ -48,7 +48,7 @@ def createRandomDataPast():
             writer.writerow({
                 'vehicle': random.randint(1,10), # business owns 10 vehicles
                 'date': generateDate(x, False),
-                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 70 kilometers in one trip
+                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
             })
 
 def generatePast():
@@ -71,9 +71,9 @@ def createRandomDataCurrent():
 
         for x in range(200):
             writer.writerow({
-                'vehicle': random.randint(1,10), # business owns 10 vehicles
+                'vehicle': 0, # vehicles currently unassigned
                 'date': generateDate(x, True),
-                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 70 kilometers in one trip
+                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
             })
 
 def generateCurrent():

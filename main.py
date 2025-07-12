@@ -17,8 +17,7 @@ if __name__ == "__main__":
         car_list.append(Car.Car(i + 1, True if i <= 6 else False)) # first seven are light, last three are heavy
 
     rdg.generatePast() # generate data for past trips
-
-    rdg.generateCurrent()
+    rdg.generateCurrent() # generate data for future trips
 
     df = pd.read_csv(r"data\cleaned_sorted_ride_data.csv") # load past trips
     full_df = PastTrips.runPastTrips(df) # get forecasted data from past trips
@@ -31,7 +30,7 @@ if __name__ == "__main__":
         car_list[row.vehicle - 1].updateDriven(row.distance)
 
     root = tk.Tk()
-    root.title("ADS Rideshare")
+    root.title("Fahrgemeinschaft Deutschland - 2025 Forecasting and Scheduling")
     forecast_plot = PlotData.makeForecastPlot(full_df)
     car_plot = PlotData.makeCarPlot(car_list)
 

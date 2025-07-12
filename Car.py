@@ -17,10 +17,6 @@ class Car():
     def getDriven(self):
         return self.kilos_driven
     
-    def resetMaintenance(self):
-        if self.checkMaintenance:
-            self.kilos_driven -= self.maintenance_kilos
-    
     def updateDriven(self, kilos: int):
         self.kilos_driven += kilos
         self.litres_burnt += (kilos / self.kilos_per_litre)
@@ -34,6 +30,10 @@ class Car():
     def checkMaintenance(self): # if the car has driven enough, it requires maintenance
         self.maintenance_needed = self.kilos_driven >= self.maintenance_kilos
         return self.maintenance_needed
+    
+    def resetMaintenance(self):
+        if self.checkMaintenance:
+            self.kilos_driven -= self.maintenance_kilos
     
     def hypoMaintenance(self, extra: int):
         return ((self.kilos_driven + extra) >= self.maintenance_kilos) and (not self.maintenance_needed)
