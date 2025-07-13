@@ -11,13 +11,13 @@ class Car():
     def getId(self):
         return self.id
 
-    def getType(self):
+    def getType(self): # return whether a car is heavy or light
         return self.type
 
     def getDriven(self):
         return self.kilos_driven
     
-    def updateDriven(self, kilos: int):
+    def updateDriven(self, kilos: int): # update how far a car has driven and how much gas it has burnt
         self.kilos_driven += kilos
         self.litres_burnt += (kilos / self.kilos_per_litre)
 
@@ -31,9 +31,10 @@ class Car():
         self.maintenance_needed = self.kilos_driven >= self.maintenance_kilos
         return self.maintenance_needed
     
-    def resetMaintenance(self):
-        if self.checkMaintenance:
+    def resetMaintenance(self): # if a car has received maintenance, reduce the distance driven by how many kilos until next maintenance
+        if self.checkMaintenance():
             self.kilos_driven -= self.maintenance_kilos
+            self.litres_burnt -= round(self.maintenance_kilos / self.kilos_per_litre)
     
-    def hypoMaintenance(self, extra: int):
+    def hypoMaintenance(self, extra: int): # check if a car would need maintenance if it drove a certain number of kilos
         return ((self.kilos_driven + extra) >= self.maintenance_kilos) and (not self.maintenance_needed)

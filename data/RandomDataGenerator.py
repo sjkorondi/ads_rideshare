@@ -29,7 +29,7 @@ def pickYear(num_gen: int):
     else:
         return 2024
     
-def generateDate(num_gen: int, is_2025: bool):
+def generateDate(num_gen: int, is_2025: bool): # generate a date for a trip to occur
     year = 2025 if is_2025 else pickYear(num_gen=num_gen)
     month = pickBiasedMonth()
     day = pickRandomDay(month=month)
@@ -65,7 +65,7 @@ def generatePast():
 
 def createRandomDataCurrent():
     with open(r"data\future_ride_data.csv", 'w', newline='') as csvfile: # writes randomly generated data to a .csv file (already made, not needed)
-        fieldnames = ['vehicle', 'date', 'distance']
+        fieldnames = ['vehicle', 'date', 'distance', 'passengers']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -73,7 +73,8 @@ def createRandomDataCurrent():
             writer.writerow({
                 'vehicle': 0, # vehicles currently unassigned
                 'date': generateDate(x, True),
-                'distance': random.randint(10,50) # vehicle drives anywhere from 10 to 50 kilometers in one trip
+                'distance': random.randint(10,50), # vehicle drives anywhere from 10 to 50 kilometers in one trip
+                'passengers': random.randint(1,8)
             })
 
 def generateCurrent():
@@ -83,6 +84,7 @@ def generateCurrent():
     df['vehicle'] = df['vehicle'].astype(int) # cleaning data
     df['date'] = pd.to_datetime(df['date'], format='mixed', errors='coerce')
     df['distance'] = df['distance'].astype(int)
+    df['passengers'] = df['passengers'].astype(int)
 
     df = df.sort_values('date').reset_index(drop=True) # sorting data by the date
 
