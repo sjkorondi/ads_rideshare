@@ -19,22 +19,27 @@ class Car():
     
     def updateDriven(self, kilos: int): # update how far a car has driven and how much gas it has burnt
         self.kilos_driven += kilos
-        self.litres_burnt += (kilos / self.kilos_per_litre)
+        self.litres_burnt += round(kilos / self.kilos_per_litre)
 
     def getLitres(self):
         return self.litres_burnt
+    
+    def getLitresOneTrip(self, kilos): # return the amount of gas burnt by a single trip 
+        return round(kilos / self.kilos_per_litre)
 
     def getMaintenanceKilos(self):
         return self.maintenance_kilos
 
     def checkMaintenance(self): # if the car has driven enough, it requires maintenance
-        self.maintenance_needed = self.kilos_driven >= self.maintenance_kilos
+        self.maintenance_needed = (self.kilos_driven >= self.maintenance_kilos)
         return self.maintenance_needed
     
     def resetMaintenance(self): # if a car has received maintenance, reduce the distance driven by how many kilos until next maintenance
         if self.checkMaintenance():
             self.kilos_driven -= self.maintenance_kilos
             self.litres_burnt -= round(self.maintenance_kilos / self.kilos_per_litre)
+            return True
+        return False
     
     def hypoMaintenance(self, extra: int): # check if a car would need maintenance if it drove a certain number of kilos
         return ((self.kilos_driven + extra) >= self.maintenance_kilos) and (not self.maintenance_needed)

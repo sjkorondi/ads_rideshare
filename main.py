@@ -11,7 +11,7 @@ PETROL_PRICE = 1.67 # average petrol price (euros/litre) in Germany as of 07/07/
 petrol_spending = 0
 distance_driven = 0
 
-if __name__ == "__main__":
+def main():
     car_list = [] # initialize a list of cars
     for i in range(10):
         car_list.append(Car.Car(i + 1, True if i <= 6 else False)) # first seven are light, last three are heavy
@@ -39,3 +39,6 @@ if __name__ == "__main__":
     gui = GUI.GUI(root, forecasted_distance, car_list, forecast_plot, car_plot, future_df)
 
     root.mainloop()
+
+if __name__ == "__main__":
+    main()

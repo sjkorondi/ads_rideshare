@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 def runPastTrips(df):
     df["date"] = pd.to_datetime(df["date"], format="mixed", errors="coerce") # clean data for graphing
@@ -38,3 +39,51 @@ def runPastTrips(df):
     full_df = pd.concat([long_df, forecast_df], ignore_index=True) # combine data
 
     return full_df
+
+def runFutureCalculations(df, cars):
+                light_cars = [car for car in cars if car.getType()]
+                heavy_cars = [car for car in cars if not car.getType()]
+
+                for index, row in df.iterrows():
+                        carType = False
+                        all_lights_need_maintenance = all(car.hypoMaintenance(row.distance) for car in light_cars)
+                        all_heavies_need_maintenance = all(car.hypoMaintenance(row.distance) for car in heavy_cars)
+
+                        if(row.passengers > 3):
+                                carType = False
+                        else:
+                                if(all_lights_need_maintenance):
+                                        if(all_heavies_need_maintenance):
+                                                carType = True
+                                        else:
+                                                carType = False
+                                else:
+                                        carType = True
+
+                        if(carType and all_lights_need_maintenance):
+                                df.at[index, 'vehicle'] = random.randint(1,7)
+                                cars[row.vehicle - 1].resetMaintenance()
+                                cars[row.vehicle - 1].updateDriven(row.distance)
+                                all_lights_need_maintenance = False
+                        elif(carType):
+                                for car in light_cars:
+                                        if car.hypoMaintenance(row.distance):
+                                                pass
+                                        else:
+                                                df.at[index, 'vehicle'] = car.getId()
+                                                car.updateDriven(row.distance)
+                                                break
+                        elif(not carType and all_heavies_need_maintenance):
+                                df.at[index, 'vehicle'] = random.randint(8,10)
+                                cars[row.vehicle - 1].resetMaintenance()
+                                cars[row.vehicle - 1].updateDriven(row.distance)
+                                all_heavies_need_maintenance = False
+                        else:
+                                for car in heavy_cars:
+                                        if car.hypoMaintenance(row.distance):
+                                                pass
+                                        else:
+                                                df.at[index, 'vehicle'] = car.getId()
+                                                car.updateDriven(row.distance)
+                                                break
+               
